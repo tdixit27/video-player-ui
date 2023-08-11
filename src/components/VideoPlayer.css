@@ -1,0 +1,25 @@
+/* VideoPlayer.css */
+
+/* Custom styles for the resolution switcher */
+.vjs-resolution-switcher-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .vjs-menu-item {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .vjs-menu-item:last-child {
+    border-bottom: none;
+  }
+  
+  .vjs-menu-item:hover {
+    background-color: #f5f5f5;
+  }
+
+  
+  
