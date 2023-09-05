@@ -55,11 +55,11 @@ function VideoPlayer({ videoUrl }) {
 
     return (
       <div className='container'>
-      <video
-        id="player"
-        className="video-js vjs-default-skin"
-        controls
+       <video
+        id="player" playsinline controls
+        muted
         preload="auto"
+        autoPlay="true"
       >
       </video>
       </div>
