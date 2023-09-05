@@ -26,6 +26,7 @@ function VideoPlayer({ videoUrl }) {
             'pip', 
             'airplay', 
             'fullscreen',
+            'playsinline'
           ];
 
           defaultOptions.quality = {
