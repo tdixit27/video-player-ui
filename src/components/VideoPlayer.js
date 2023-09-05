@@ -8,7 +8,7 @@ function VideoPlayer({ videoUrl }) {
       var video = document.getElementById('player');
       var source = videoUrl;
       const defaultOptions = {};
-      if (Hls.isSupported()) {
+     if (Hls.isSupported()) {
         const hls = new Hls();        
         hls.loadSource(source);
         hls.on(Hls.Events.MANIFEST_PARSED, function (event,data) {
@@ -25,10 +25,9 @@ function VideoPlayer({ videoUrl }) {
             'settings',
             'pip', 
             'airplay', 
-            'fullscreen',
-            'playsinline'
+            'fullscreen'
           ];
-
+          defaultOptions.playsinline=true;
           defaultOptions.quality = {
             default: availableQualities[0],
             options: availableQualities,
@@ -44,24 +43,43 @@ function VideoPlayer({ videoUrl }) {
           }
 
           new Plyr(video, defaultOptions);
-         
+          
     })
 
     hls.attachMedia(video);
     window.hls = hls;
+    
+    const player = new Plyr(video, {volume:'1'});
+    player.muted=true;
+    player.playsinline=true;
+  //  player.fullscreen.enter();
+    // player.on('ready', (event) => {
+    //   const instance = event.detail.plyr;
+    // });
+    // Handle changing captions
+		// player.on('languagechange', () => {
+		// 	// Caption support is still flaky. See: https://github.com/sampotts/plyr/issues/994
+		// 	setTimeout(() => hls.subtitleTrack = player.currentTrack, 50);
+		// });
+	
+	
+	// Expose player so it can be used from the console
+	window.player = player;
   }
 
 }, [videoUrl])
 
     return (
       <div className='container'>
-       <video
+      {/* <video
         id="player" playsinline controls
         muted
+        autoplay
         preload="auto"
         autoPlay="true"
       >
-      </video>
+      </video> */}
+      <video id="player" playsinline controls muted></video>
       </div>
     );
   }
