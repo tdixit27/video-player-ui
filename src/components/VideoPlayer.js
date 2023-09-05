@@ -8,7 +8,13 @@ function VideoPlayer({ videoUrl }) {
       var video = document.getElementById('player');
       var source = videoUrl;
       const defaultOptions = {};
-     if (Hls.isSupported()) {
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = source;
+        //
+        // If no native HLS support, check if HLS.js is supported
+        //
+      }
+     else if (Hls.isSupported()) {
         const hls = new Hls();        
         hls.loadSource(source);
         hls.on(Hls.Events.MANIFEST_PARSED, function (event,data) {
@@ -50,7 +56,6 @@ function VideoPlayer({ videoUrl }) {
     window.hls = hls;
     
     const player = new Plyr(video, {fullscreen:{ enabled: true, fallback: true, iosNative: true, container: null },volume:'1'});
-    
     player.muted=true;
     player.playsinline=true;
   //  player.fullscreen.enter();
