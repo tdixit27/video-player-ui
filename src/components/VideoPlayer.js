@@ -49,7 +49,8 @@ function VideoPlayer({ videoUrl }) {
     hls.attachMedia(video);
     window.hls = hls;
     
-    const player = new Plyr(video, {volume:'1'});
+    const player = new Plyr(video, {fullscreen:{ enabled: true, fallback: true, iosNative: true, container: null },volume:'1'});
+    
     player.muted=true;
     player.playsinline=true;
   //  player.fullscreen.enter();
