@@ -1,3 +1,4 @@
+
 import React, {useEffect} from 'react';
 import Hls from 'hls.js';
 import Plyr from 'plyr';
@@ -8,7 +9,10 @@ function VideoPlayer({ videoUrl }) {
       var video = document.getElementById('player');
       var source = videoUrl;
       const defaultOptions = {};
-      if (Hls.isSupported()) {
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = source;
+      }
+     else if (Hls.isSupported()) {
         const hls = new Hls();        
         hls.loadSource(source);
         hls.on(Hls.Events.MANIFEST_PARSED, function (event,data) {
@@ -23,12 +27,11 @@ function VideoPlayer({ videoUrl }) {
             'mute', 
             'volume', 
             'settings',
-            'pip', 
             'airplay', 
             'fullscreen',
           ];
-
-          defaultOptions.quality = {
+          defaultOptions.playsinline=true;
+         defaultOptions.quality = {
             default: availableQualities[0],
             options: availableQualities,
             forced: true,
@@ -49,14 +52,12 @@ function VideoPlayer({ videoUrl }) {
     hls.attachMedia(video);
     window.hls = hls;
   }
-
 }, [videoUrl])
 
     return (
       <div className='container'>
       <video
         id="player"
-        className="video-js vjs-default-skin"
         controls
         preload="auto"
       >
@@ -65,4 +66,4 @@ function VideoPlayer({ videoUrl }) {
     );
   }
   
-  export default VideoPlayer;
+export default VideoPlayer;
