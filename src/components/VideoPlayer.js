@@ -66,4 +66,4 @@ function VideoPlayer({ videoUrl }) {
     );
   }
   
-export default VideoPlayer;
+  export default VideoPlayer;
