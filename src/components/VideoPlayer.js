@@ -1,4 +1,3 @@
-
 import React, {useEffect} from 'react';
 import Hls from 'hls.js';
 import Plyr from 'plyr';
@@ -9,7 +8,7 @@ function VideoPlayer({ videoUrl }) {
       var video = document.getElementById('player');
       var source = videoUrl;
       const defaultOptions = {};
-      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      if (!Hls.isSupported()) {
         video.src = source;
       }
      else if (Hls.isSupported()) {
@@ -17,6 +16,7 @@ function VideoPlayer({ videoUrl }) {
         hls.loadSource(source);
         hls.on(Hls.Events.MANIFEST_PARSED, function (event,data) {
           const availableQualities = hls.levels.map((l) => l.height)
+          availableQualities.unshift(0) //prepend 0 to quality array
           defaultOptions.controls = 
           [
             'play-large',
@@ -30,20 +30,30 @@ function VideoPlayer({ videoUrl }) {
             'airplay', 
             'fullscreen',
           ];
-          defaultOptions.playsinline=true;
-         defaultOptions.quality = {
-            default: availableQualities[0],
-            options: availableQualities,
-            forced: true,
-            onChange: (newQuality) => { console.log('Inside updateQuality',newQuality);
-            window.hls.levels.forEach((level, levelIndex) => {
-              if(level.height === newQuality){
-                window.hls.currentLevel = levelIndex;
-              }   
-            });
+      
 
-            }
+        	    // Add Auto Label 
+		    defaultOptions.i18n = {
+		    	qualityLabel: {
+		    		0: 'Auto',
+		    	},
+		    }
+
+          defaultOptions.quality = {
+            default: 0, //Default - AUTO
+              options: availableQualities,
+              forced: true,        
+              onChange: (e) => updateQuality(e),
           }
+
+          hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
+	          var span = document.querySelector(".plyr__menu__container [data-plyr='quality'][value='0'] span")
+	          if (hls.autoLevelEnabled) {
+	            span.innerHTML = `Auto`
+	          } else {
+	            span.innerHTML = `Auto`
+	          }
+	        })
 
           new Plyr(video, defaultOptions);
          
@@ -53,6 +63,19 @@ function VideoPlayer({ videoUrl }) {
     window.hls = hls;
   }
 }, [videoUrl])
+
+function updateQuality(newQuality) {
+  if (newQuality === 0) {
+    window.hls.currentLevel = -1; //Enable AUTO quality if option.value = 0
+  } else {
+    window.hls.levels.forEach((level, levelIndex) => {
+      if (level.height === newQuality) {
+        console.log("Found quality match with " + newQuality);
+        window.hls.currentLevel = levelIndex;
+      }
+    });
+  }
+}
 
     return (
       <div className='container'>
