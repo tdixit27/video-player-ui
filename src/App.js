@@ -17,7 +17,7 @@ function App() {
     height="264"
     data-setup="{}"
   >
-    <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/x-mpegURL"></source>
+    <source src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.mp4/.m3u8" type="application/x-mpegURL"></source>
 
     <p class="vjs-no-js">
       To view this video please enable JavaScript, and consider upgrading to a
